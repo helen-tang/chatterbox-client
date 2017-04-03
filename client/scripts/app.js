@@ -44,18 +44,18 @@ App.prototype.fetch = function() {
 
       for (var i = 0; i < data.results.length; i++) {
         if (uniqRooms[data.results.roomname] === undefined) {
-          uniqRooms[data.results.roomname] = 1;
+          uniqRooms[data.results[i].roomname] = 1;
         }
       }
 
+      for (var key in uniqRooms) {
+        app.renderRoom(key);
+      }
      
       data.results.forEach(function(message) {
         app.renderMessage(message);
       });
 
-      for (var key in uniqRooms) {
-        app.renderRoom(key);
-      }
 
     },
     error: function (data) {
