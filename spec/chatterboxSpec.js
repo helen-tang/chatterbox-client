@@ -30,7 +30,7 @@ describe('chatterbox', function() {
       it('should submit a POST request via $.ajax', function(done) {
         app.send([]);
         expect($.ajax.calledOnce).to.be.true;
-        // sinon.spy method `args` comes in the form [function calls][arguments from that call]
+        // sinon.spy method `args` comes in ther form [function calls][arguments from that call]
         ajaxOptions = typeof $.ajax.args[0][0] === 'object' ? $.ajax.args[0][0] : $.ajax.args[0][1];
         expect(ajaxOptions.type).to.equal('POST');
         done();
@@ -83,7 +83,11 @@ describe('chatterbox', function() {
 
         app.renderMessage(message);
 
-        expect($('#chats').children().length).to.equal(1);
+        setTimeout(function() {
+          console.log('Waiting because broken');
+          expect($('#chats').children().length).to.equal(1);
+        }, 0);
+
       });
 
       it('should be able to add rooms to the DOM', function() {

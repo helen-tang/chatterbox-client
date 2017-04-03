@@ -6,20 +6,7 @@ var App = function() {
 
 App.prototype.init = function() {
 
-  $.ajax({
-    // This is the url you should use to communicate with the parse API server.
-    url: 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages',
-    type: 'GET',
-    contentType: 'application/json',
-    success: function (data) {
-      console.log('chatterbox: Message recieved');
-      console.log(data);
-    },
-    error: function (data) {
-      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
-      console.error('chatterbox: Failed to send message', data);
-    }
-  });
+  this.fetch();
   
 };
 
@@ -50,32 +37,25 @@ App.prototype.fetch = function() {
     contentType: 'application/json',
     success: function (data) {
       console.log('chatterbox: Message recieved');
-      console.log(data);
-      data.forEach(function(message) {
+      console.log(data.results);
+      console.log(app);
 
-        var username = message.username;
-        var created = message.createdAt;
-        var roomname = message.roomname;
-        var text = message.text;
+      var uniqRooms = {};
 
-        var elementToAppend = `<div class="row">
-                              <div class="four columns">
-                                <h3>` + username + `</h3>
-                              </div>
-                              <div class="four columns">
-                                <h3>` + created + `</h3>
-                              </div>
-                              <div class="six columns">
-                                <p>` + text + `</p>
-                              </div>
-                            </div>`;
+      for (var i = 0; i < data.results.length; i++) {
+        if (uniqRooms[data.results.roomname] === undefined) {
+          uniqRooms[data.results.roomname] = 1;
+        }
+      }
 
-        console.log(elementToAppend);
-        console.log($('#chats'));
-
-        // $('#chats').append(elementToAppend);
-        $('#chats').append(elementToAppend);
+     
+      data.results.forEach(function(message) {
+        app.renderMessage(message);
       });
+
+      for (var key in uniqRooms) {
+        app.renderRoom(key);
+      }
 
     },
     error: function (data) {
@@ -83,8 +63,6 @@ App.prototype.fetch = function() {
       console.error('chatterbox: Failed to send message', data);
     }
   });
-
-
 
 };
 
@@ -96,14 +74,37 @@ App.prototype.clearMessages = function() {
 
 App.prototype.renderMessage = function(message) {
 
-  this.send(message);
-  this.fetch();
+  if (message) {
+
+    var username = message.username;
+    var created = message.createdAt;
+    var roomname = message.roomname;
+    var text = message.text;
+
+    var elementToAppend = `<div class="row">
+                            <div class="four columns">
+                              <h3>` + username + `</h3>
+                            </div>
+                            <div class="four columns">
+                              <p>` + created + `</p>
+                            </div>
+                            <div class="six columns">
+                              <h5>` + text + `</h5>
+                            </div>
+                          </div>`;
+
+
+    $('#chats').append(elementToAppend);  
+  }
 
 
 };
 
-App.prototype.renderRoom = function() {
+App.prototype.renderRoom = function(room) {
   
+  var roomToAppend = '<option value=' + room + '>' + room + '</option>';
+  $('#roomSelect').append(roomToAppend);
+
 };
 
 App.prototype.handleUsernameClick = function() {
