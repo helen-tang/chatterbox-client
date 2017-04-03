@@ -2,10 +2,19 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>chatterbox</title>
+    <meta name="description" content="Chatterbox Client">
+    <meta name="author" content="Arseniy Kotov">
+    <!-- Mobile Specific Metas
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS
+      –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <link rel="stylesheet" href="styles/styles.css">
-
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/skeleton.css">
+    <title>chatterbox</title>
     <!-- dependencies -->
+    <script src="bower_components/underscore/underscore.js"></script>  
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
@@ -23,10 +32,36 @@
     <script src="scripts/app.js"></script>
   </head>
   <body>
-    <div id="main">
-      <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
+    
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <h1>Chatterbox</h1>
+        </div>
+      </div>
     </div>
-    <div id="chats"></div>
+
+    <div class="container">
+      <div class="row">
+        <div class="eight columns">
+          <div>
+            <label for="exampleMessage">Message</label>
+            <textarea class="u-full-width" placeholder="Enter your message here..." id="exampleMessage"></textarea>
+          </div>
+        </div>
+        <div class="two columns">
+          <input class="button-primary" type="submit" value="submit input">
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <div id="chats"></div>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
