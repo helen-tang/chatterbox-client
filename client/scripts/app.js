@@ -51,12 +51,40 @@ App.prototype.fetch = function() {
     success: function (data) {
       console.log('chatterbox: Message recieved');
       console.log(data);
+      data.forEach(function(message) {
+
+        var username = message.username;
+        var created = message.createdAt;
+        var roomname = message.roomname;
+        var text = message.text;
+
+        var elementToAppend = `<div class="row">
+                              <div class="four columns">
+                                <h3>` + username + `</h3>
+                              </div>
+                              <div class="four columns">
+                                <h3>` + created + `</h3>
+                              </div>
+                              <div class="six columns">
+                                <p>` + text + `</p>
+                              </div>
+                            </div>`;
+
+        console.log(elementToAppend);
+        console.log($('#chats'));
+
+        // $('#chats').append(elementToAppend);
+        $('#chats').append(elementToAppend);
+      });
+
     },
     error: function (data) {
       // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('chatterbox: Failed to send message', data);
     }
   });
+
+
 
 };
 
@@ -67,29 +95,10 @@ App.prototype.clearMessages = function() {
 };
 
 App.prototype.renderMessage = function(message) {
-  
-  var username = message.username;
-  var created = message.createdAt;
-  var roomname = message.roomname;
-  var text = message.text;
 
-  var elementToAppend = `<div class="row">
-                            <div class="four columns">
-                              <h3>` + username + `</h3>
-                            </div>
-                            <div class="four columns">
-                              <h3>` + created + `</h3>
-                            </div>
-                            <div class="six columns">
-                              <p>` + text + `</p>
-                            </div>
-                          </div>`;
+  this.send(message);
+  this.fetch();
 
-  console.log(elementToAppend);
-  console.log($('#chats'));
-
-  // $('#chats').append(elementToAppend);
-  $('div #chats').parent().append(elementToAppend);
 
 };
 
@@ -111,7 +120,6 @@ $(document).ready(function() {
 
   app.init();
 
-  
   $('#refresh').on('click', function(event) {
     event.preventDefault();
     app.fetch();
