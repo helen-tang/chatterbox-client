@@ -77,6 +77,11 @@ App.prototype.fetch = function(room) {
           i--;
           continue;
         }
+        if (data.results[i].roomname && data.results[i].roomname.match('<.*>')) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
         if (data.results[i].username && data.results[i].username === 'hi') {
           data.results.splice(i, 1);
           i--;
