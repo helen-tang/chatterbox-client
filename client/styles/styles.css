@@ -143,4 +143,10 @@ form input[type=text] {
 
 #roomSelect{
   border: 2px solid lightskyblue;
+  width: 200px;
+  overflow: hidden;
+}
+
+option {
+  text-overflow: ellipsis;
 }
