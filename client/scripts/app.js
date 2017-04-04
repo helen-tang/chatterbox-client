@@ -1,7 +1,7 @@
 var App = function() {
   this.server = 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages';
-  this.username = 'Helen Da Bo$$';
-  this.friends = [];
+  this.username = 'Arseniy';
+  this.roomList = [];
 };
 
 App.prototype.init = function() {
@@ -26,7 +26,7 @@ App.prototype.send = function(message) {
   
 };
 
-App.prototype.fetch = function() {
+App.prototype.fetch = function(room) {
 
   $.ajax({
     // This is the url you should use to communicate with the parse API server.
@@ -42,8 +42,12 @@ App.prototype.fetch = function() {
       console.log(data.results);
 
       for (var i = 0; i < data.results.length; i++) {
-
-        if (!_.has(data.results[i], 'text') || !_.has(data.results[i], 'username')) {
+        if (data.results[i].roomname === '' || data.results[i].roomname === null) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (!_.has(data.results[i], 'text') || !_.has(data.results[i], 'username') || data.results[i].text === '') {
           data.results.splice(i, 1);
           i--;
           continue;
@@ -78,7 +82,16 @@ App.prototype.fetch = function() {
           i--;
           continue;
         }
+      }
 
+      if (room !== undefined) {
+        for (var i = 0; i < data.results.length; i++) {
+          if (data.results[i].roomname && data.results[i].roomname !== room) {
+            data.results.splice(i, 1);
+            i--;
+            continue;
+          }          
+        }
       }
 
       console.log('chatterbox: Message recieved');
@@ -120,7 +133,7 @@ App.prototype.renderMessage = function(message) {
   if (message) {
 
     var username = message.username;
-    var created = $.timeago(message.createdAt);
+    var created = $.timeago(message.createdAt) || $.now();
     var roomname = message.roomname;
     var text = message.text;
 
@@ -144,14 +157,27 @@ App.prototype.renderMessage = function(message) {
 
 App.prototype.renderRoom = function(room) {
   
-  
+  if (room === null || room === '' || room === undefined || app.roomList.indexOf(room) !== -1) {
+    return;
+  }
 
-  var roomToAppend = '<option value=' + room + '>' + room + '</option>';
+  var roomToAppend = '<option class="workPlox">' + room + '</option>';
   $('#roomSelect').append(roomToAppend);
+  app.roomList.push(room);
 
 };
 
-App.prototype.handleUsernameClick = function() {
+App.prototype.handleUsernameClick = function(clickedUsername, cssProperty, cssValue) {
+  
+  var children = $('#chats').children();
+  
+  _.each(children, function(tweet) {
+    var username = $(tweet).find('.userName').text();
+    if (clickedUsername === username) {
+      console.log(username);
+      $(tweet).css(cssProperty, cssValue);
+    }
+  });
   
 };
 
@@ -183,12 +209,51 @@ $(document).ready(function() {
     var newMessage = {
       username: app.username,
       createdAt: $.now(),   
-      text: myText
+      text: myText,
+      roomname: $('#roomSelect').val()
     };
 
     app.send(newMessage);
     app.clearMessages();
     app.fetch();
+  });
+
+  $(document).on('click', '#postAddRoom', function(event) {
+    event.preventDefault();
+    var roomName = $('textarea#postAddRoom').val();
+    app.renderRoom(roomName);
+    $('textarea#postAddRoom').val('');
+  });
+
+  $(document).on('click', '.userName', function() {
+    if ($(this).css('font-weight') === 'bold') {
+      
+      console.log($(this).attr('font-weight', 'bold'));
+      var cssProperty = 'font-weight';
+      var cssValue = 'normal';
+      console.log(cssProperty);
+      console.log(cssValue);
+      app.handleUsernameClick($(this).text(), cssProperty, cssValue);
+
+    } else {
+
+      var cssProperty = 'font-weight';
+      var cssValue = 'bold';
+      console.log(cssProperty);
+      console.log(cssValue);
+      app.handleUsernameClick($(this).text(), cssProperty, cssValue);
+
+    }
+  });
+
+  $(document).on('change', '#roomSelect', function(event) {
+
+    event.preventDefault();
+    var room = $(this).val();
+    console.log(room);
+    app.clearMessages();
+    app.fetch(room);
+
   });
 
 });
