@@ -123,10 +123,11 @@ form input[type=text] {
   text-align: center;
 }
 
-nav p {
+
+.headers {
   display: inline-block;
   display: -moz-inline-box;
   width: 30%;
   text-align: center;
+  border: 2px solid lightskyblue;
 }
-
