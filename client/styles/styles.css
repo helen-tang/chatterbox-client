@@ -130,4 +130,17 @@ form input[type=text] {
   width: 30%;
   text-align: center;
   border: 2px solid lightskyblue;
+  background-color: white;
+}
+
+#exampleMessage {
+  border: 2px solid lightskyblue;
+}
+
+#postAddRoom {
+  border: 2px solid lightskyblue;
+}
+
+#roomSelect{
+  border: 2px solid lightskyblue;
 }
