@@ -94,6 +94,32 @@ form input[type=text] {
     background-color: #0090da;
 }
 
+.userName {
+  margin: auto;
+  text-align: center;
+}
+
+.userName:hover {
+  text-decoration: underline;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.userName:visited {
+  color: cyan;
+}
+
+.tweet {
+  border: 2px solid lightskyblue;
+  padding: 30px 5px 5px 5px;
+  margin-bottom: 5px;
+}
+
+.textBox {
+  text-align: center;
+}
+
+
 
 
 

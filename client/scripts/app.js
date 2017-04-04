@@ -124,15 +124,15 @@ App.prototype.renderMessage = function(message) {
     var roomname = message.roomname;
     var text = message.text;
 
-    var elementToAppend = `<div class="row">
-                            <div class="four columns">
-                              <h3>` + username + `</h3>
+    var elementToAppend = `<div class="row tweet">
+                            <div class="two columns">
+                              <p class="userName">` + username + `</p>
                             </div>
-                            <div class="four columns">
+                            <div class="four columns u-pull-right">
                               <p>` + created + `</p>
                             </div>
                             <div class="six columns">
-                              <h5>` + text + `</h5>
+                              <p class="textBox">` + text + `</p>
                             </div>
                           </div>`;
 
