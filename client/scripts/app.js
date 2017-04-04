@@ -1,5 +1,3 @@
-// YOUR CODE HERE:
-
 var App = function() {
   this.server = 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages';
   this.username = 'Helen Da Bo$$';
@@ -7,10 +5,7 @@ var App = function() {
 };
 
 App.prototype.init = function() {
-
-  console.log(this.username);
   this.fetch();
-  
 };
 
 App.prototype.send = function(message) {
@@ -48,14 +43,27 @@ App.prototype.fetch = function() {
 
       for (var i = 0; i < data.results.length; i++) {
 
-        console.log('username', data.results[i].username);
-
         if (!_.has(data.results[i], 'text') || !_.has(data.results[i], 'username')) {
           data.results.splice(i, 1);
           i--;
           continue;
         }
         if (data.results[i].text && data.results[i].text.match('<.*>')) { 
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].username && data.results[i].username.match('<.*>')) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].createdAt && data.results[i].createdAt.match('<.*>')) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].updatedAt && data.results[i].updatedAt.match('<.*>')) {
           data.results.splice(i, 1);
           i--;
           continue;
@@ -112,7 +120,7 @@ App.prototype.renderMessage = function(message) {
   if (message) {
 
     var username = message.username;
-    var created = message.createdAt;
+    var created = $.timeago(message.createdAt);
     var roomname = message.roomname;
     var text = message.text;
 
@@ -155,7 +163,8 @@ App.prototype.handleSubmit = function() {
 var app = new App();
 
 $(document).ready(function() {
-
+  $('time.timeago').timeago();
+  $.timeago.settings.allowFuture = false;
   app.init();
 
   $('#refresh').on('click', function(event) {
@@ -173,7 +182,7 @@ $(document).ready(function() {
 
     var newMessage = {
       username: app.username,
-      createdAt: $.now(),
+      createdAt: $.now(),   
       text: myText
     };
 

@@ -15,7 +15,9 @@
     <title>Chatterbox</title>
     <!-- dependencies -->
     <script src="bower_components/underscore/underscore.js"></script>  
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.timeago.js"></script>
+    
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -36,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <h1>Chatterbox</h1>
+          <h1 id="header">Chatterbox</h1>
         </div>
       </div>
     </div>
