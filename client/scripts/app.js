@@ -2,7 +2,8 @@
 
 var App = function() {
   this.server = 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages';
-  this.username = 'ARSHEL';
+  this.username = 'Helen Da Bo$$';
+  this.friends = [];
 };
 
 App.prototype.init = function() {
@@ -42,7 +43,7 @@ App.prototype.fetch = function() {
       limit: 400
     },
     success: function (data) {
-    
+      
       console.log(data.results);
 
       for (var i = 0; i < data.results.length; i++) {
@@ -102,7 +103,7 @@ App.prototype.fetch = function() {
 
 App.prototype.clearMessages = function() {
 
-  $('#chats').remove();
+  $('#chats').children().remove();
   
 };
 
@@ -135,6 +136,8 @@ App.prototype.renderMessage = function(message) {
 
 App.prototype.renderRoom = function(room) {
   
+  
+
   var roomToAppend = '<option value=' + room + '>' + room + '</option>';
   $('#roomSelect').append(roomToAppend);
 
@@ -145,6 +148,7 @@ App.prototype.handleUsernameClick = function() {
 };
 
 App.prototype.handleSubmit = function() {
+  app.clearMessages();
   app.fetch();
 };
 
@@ -156,14 +160,15 @@ $(document).ready(function() {
 
   $('#refresh').on('click', function(event) {
     event.preventDefault();
+    app.clearMessages();
     app.fetch();
   });
-
 
   $('#postMessage').on('click', function(event) {
     event.preventDefault();
 
     var myText = $('textarea#exampleMessage').val();
+    $('textarea#exampleMessage').val('');
     console.log(myText);
 
     var newMessage = {
@@ -173,7 +178,8 @@ $(document).ready(function() {
     };
 
     app.send(newMessage);
-    app.handleSubmit();
+    app.clearMessages();
+    app.fetch();
   });
 
 });
