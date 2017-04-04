@@ -52,6 +52,11 @@ App.prototype.fetch = function(room) {
           i--;
           continue;
         }
+        if (data.results[i].roomname.length > 20) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
         if (data.results[i].text && data.results[i].text.match('<.*>')) { 
           data.results.splice(i, 1);
           i--;
