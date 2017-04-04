@@ -2,10 +2,12 @@
 
 var App = function() {
   this.server = 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages';
+  this.username = 'ARSHEL';
 };
 
 App.prototype.init = function() {
 
+  console.log(this.username);
   this.fetch();
   
 };
@@ -35,15 +37,47 @@ App.prototype.fetch = function() {
     url: 'http://parse.sfs.hackreactor.com/chatterbox/classes/messages',
     type: 'GET',
     contentType: 'application/json',
+    data: {
+      order: '-createdAt',
+      limit: 400
+    },
     success: function (data) {
-      console.log('chatterbox: Message recieved');
+    
       console.log(data.results);
-      console.log(app);
+
+      for (var i = 0; i < data.results.length; i++) {
+
+        console.log('username', data.results[i].username);
+
+        if (!_.has(data.results[i], 'text') || !_.has(data.results[i], 'username')) {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].text && data.results[i].text.match('<.*>')) { 
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].username && data.results[i].username === 'hi') {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+        if (data.results[i].username && data.results[i].username === 'plasticbugs') {
+          data.results.splice(i, 1);
+          i--;
+          continue;
+        }
+
+      }
+
+      console.log('chatterbox: Message recieved');
 
       var uniqRooms = {};
 
       for (var i = 0; i < data.results.length; i++) {
-        if (uniqRooms[data.results.roomname] === undefined) {
+        if (uniqRooms[data.results[i].roomname] === undefined && data.results[i].roomname !== undefined) {
           uniqRooms[data.results[i].roomname] = 1;
         }
       }
@@ -97,7 +131,6 @@ App.prototype.renderMessage = function(message) {
     $('#chats').append(elementToAppend);  
   }
 
-
 };
 
 App.prototype.renderRoom = function(room) {
@@ -112,7 +145,7 @@ App.prototype.handleUsernameClick = function() {
 };
 
 App.prototype.handleSubmit = function() {
-  
+  app.fetch();
 };
 
 var app = new App();
@@ -129,7 +162,18 @@ $(document).ready(function() {
 
   $('#postMessage').on('click', function(event) {
     event.preventDefault();
-    app.send();
+
+    var myText = $('textarea#exampleMessage').val();
+    console.log(myText);
+
+    var newMessage = {
+      username: app.username,
+      createdAt: $.now(),
+      text: myText
+    };
+
+    app.send(newMessage);
+    app.handleSubmit();
   });
 
 });
