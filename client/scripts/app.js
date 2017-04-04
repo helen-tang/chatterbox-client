@@ -42,7 +42,7 @@ App.prototype.fetch = function(room) {
       console.log(data.results);
 
       for (var i = 0; i < data.results.length; i++) {
-        if (data.results[i].roomname === '' || data.results[i].roomname === null) {
+        if (data.results[i].roomname === '' || data.results[i].roomname === null || data.results[i].roomname === undefined ) {
           data.results.splice(i, 1);
           i--;
           continue;
@@ -134,7 +134,7 @@ App.prototype.renderMessage = function(message) {
 
     var username = message.username;
     var created = $.timeago(message.createdAt) || $.now();
-    var roomname = message.roomname;
+    var roomname = message.roomname || 'lobby';
     var text = message.text;
 
     var elementToAppend = `<div class="row tweet">
