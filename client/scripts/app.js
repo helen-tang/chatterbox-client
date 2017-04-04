@@ -196,7 +196,9 @@ $(document).ready(function() {
   $('#refresh').on('click', function(event) {
     event.preventDefault();
     app.clearMessages();
-    app.fetch();
+    var room = $('#roomSelect').val();
+    console.log(room);
+    app.fetch(room);
   });
 
   $('#postMessage').on('click', function(event) {
